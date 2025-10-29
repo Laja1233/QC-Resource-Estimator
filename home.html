@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Circuit Resource Estimator</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center;" class="header">
+            <h1>Quantum Circuit Resource Estimator</h1>
+            <p>Calculate physical requirements for fault-tolerant quantum computation</p>
+            <a href="how_it_works.pdf" style="color: #667eea; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;">
+                <i class="fas fa-circle-info"></i> How it works
+            </a>
+        </div>
+        
+        <div class="main-grid">
+            <!-- Input Panel -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-sliders"></i>
+                    Circuit Parameters
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Algorithm Preset</label>
+                    <select class="form-select" id="algorithmPreset" onchange="loadPreset()">
+                        <option value="custom">Custom Configuration</option>
+                        <option value="shor-2048">Shor's Algorithm (2048-bit RSA)</option>
+                        <option value="grover-256">Grover's Search (2^256 items)</option>
+                        <option value="quantum-sim">Quantum Simulation (50 spins)</option>
+                        <option value="vqe-small">VQE (Small molecule)</option>
+                    </select>
+                    <div class="input-hint">Choose a preset or configure manually</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Logical Qubits</label>
+                    <input type="number" class="form-input" id="logicalQubits" value="50" min="1">
+                    <div class="preset-chips">
+                        <span class="chip" onclick="setQuickValue('logicalQubits', 10)">10</span>
+                        <span class="chip" onclick="setQuickValue('logicalQubits', 50)">50</span>
+                        <span class="chip" onclick="setQuickValue('logicalQubits', 100)">100</span>
+                        <span class="chip" onclick="setQuickValue('logicalQubits', 1000)">1000</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">T Gates</label>
+                    <input type="number" class="form-input" id="tGates" value="100000" min="0">
+                    <div class="preset-chips">
+                        <span class="chip" onclick="setQuickValue('tGates', 10000)">10K</span>
+                        <span class="chip" onclick="setQuickValue('tGates', 100000)">100K</span>
+                        <span class="chip" onclick="setQuickValue('tGates', 1000000)">1M</span>
+                        <span class="chip" onclick="setQuickValue('tGates', 10000000)">10M</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Target Error Rate</label>
+                    <select class="form-select" id="errorRate">
+                        <option value="0.01">1% (Low precision)</option>
+                        <option value="0.001">0.1% (Standard)</option>
+                        <option value="0.0001">0.01% (High precision)</option>
+                        <option value="0.00001">0.001% (Very high)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Hardware Platform</label>
+                    <select class="form-select" id="hardware">
+                        <option value="superconducting">Superconducting (50ns gates)</option>
+                        <option value="ion">Trapped Ion (5μs gates)</option>
+                        <option value="photonic">Photonic (1ns gates)</option>
+                        <option value="neutral">Neutral Atom (2μs gates)</option>
+                    </select>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="calculateResources()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="exportPDF()">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareResults()">
+                        <i class="fas fa-share-nodes"></i> Share Link
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Results Panel -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Resource Estimates
+                </div>
+                
+                <div class="results-summary" id="summary"></div>
+                
+                <div class="section-title">
+                    <i class="fas fa-shield-halved"></i>
+                    Error Correction Schemes
+                </div>
+                <div class="scheme-grid" id="schemeGrid"></div>
+                
+                <div class="insights" id="insights"></div>
+            </div>
+        </div>
+    </div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
