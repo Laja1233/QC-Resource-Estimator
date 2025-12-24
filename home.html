@@ -11,11 +11,12 @@
 </head>
 <body>
     <div class="container">
-        <div style="text-align: center;" class="header">
-            <h1>Quantum Circuit Resource Estimator</h1>
-            <p>Calculate physical requirements for fault-tolerant quantum computation</p>
-            <a href="how_it_works.pdf" style="color: #667eea; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;">
-                <i class="fas fa-circle-info"></i> How it works
+        <div class="header">
+            <h1 style="color: black;">Quantum Circuit Resource Estimator</h1>
+            <p style="color: rgb(30, 30, 30);">Calculate physical requirements for fault-tolerant quantum computation</p>
+            <a href="#">
+                <i style="color: #667eea;" class="fas fa-circle-info"></i> <fg style="color: #667eea;">How it works</fg>
+
             </a>
         </div>
         
@@ -40,7 +41,13 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Logical Qubits</label>
+                    <label class="form-label">
+                        Logical Qubits
+                        <span class="info-icon">
+                            <i class="fas fa-circle-info"></i>
+                            <span class="tooltip">The number of error-corrected qubits needed for your quantum algorithm. Each logical qubit requires many physical qubits for error correction.</span>
+                        </span>
+                    </label>
                     <input type="number" class="form-input" id="logicalQubits" value="50" min="1">
                     <div class="preset-chips">
                         <span class="chip" onclick="setQuickValue('logicalQubits', 10)">10</span>
@@ -51,18 +58,85 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">T Gates</label>
+                    <label class="form-label">
+                        T Gates
+                        <span class="info-icon">
+                            <i class="fas fa-circle-info"></i>
+                            <span class="tooltip">Non-Clifford gates that are expensive to implement fault-tolerantly. They require magic state distillation and dominate the resource cost of most quantum algorithms.</span>
+                        </span>
+                    </label>
                     <input type="number" class="form-input" id="tGates" value="100000" min="0">
+                    <div class="input-hint">Set to 0 if not used</div>
                     <div class="preset-chips">
+                        <span class="chip" onclick="setQuickValue('tGates', 0)">None</span>
                         <span class="chip" onclick="setQuickValue('tGates', 10000)">10K</span>
                         <span class="chip" onclick="setQuickValue('tGates', 100000)">100K</span>
                         <span class="chip" onclick="setQuickValue('tGates', 1000000)">1M</span>
-                        <span class="chip" onclick="setQuickValue('tGates', 10000000)">10M</span>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Target Error Rate</label>
+                    <label class="form-label">
+                        Clifford Gates
+                        <span class="info-icon">
+                            <i class="fas fa-circle-info"></i>
+                            <span class="tooltip">Gates like H, S, CNOT that can be implemented transversally in many error correction codes. These are much cheaper than T gates and include most preparation, measurement, and stabilizer operations.</span>
+                        </span>
+                    </label>
+                    <input type="number" class="form-input" id="cliffordGates" value="500000" min="0">
+                    <div class="input-hint">Set to 0 if not used</div>
+                    <div class="preset-chips">
+                        <span class="chip" onclick="setQuickValue('cliffordGates', 0)">None</span>
+                        <span class="chip" onclick="setQuickValue('cliffordGates', 50000)">50K</span>
+                        <span class="chip" onclick="setQuickValue('cliffordGates', 500000)">500K</span>
+                        <span class="chip" onclick="setQuickValue('cliffordGates', 5000000)">5M</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Rotation Gates (Rz, Ry, Rx)
+                        <span class="info-icon">
+                            <i class="fas fa-circle-info"></i>
+                            <span class="tooltip">Arbitrary single-qubit rotations typically decomposed into Clifford+T sequences. Each rotation requires approximately 50-70 T gates for 10⁻⁸ precision using Solovay-Kitaev.</span>
+                        </span>
+                    </label>
+                    <input type="number" class="form-input" id="rotationGates" value="50000" min="0">
+                    <div class="input-hint">Set to 0 if not used</div>
+                    <div class="preset-chips">
+                        <span class="chip" onclick="setQuickValue('rotationGates', 0)">None</span>
+                        <span class="chip" onclick="setQuickValue('rotationGates', 5000)">5K</span>
+                        <span class="chip" onclick="setQuickValue('rotationGates', 50000)">50K</span>
+                        <span class="chip" onclick="setQuickValue('rotationGates', 500000)">500K</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Measurements
+                        <span class="info-icon">
+                            <i class="fas fa-circle-info"></i>
+                            <span class="tooltip">Number of measurement operations. In many codes, measurements require additional syndrome extraction rounds and contribute to overall circuit depth.</span>
+                        </span>
+                    </label>
+                    <input type="number" class="form-input" id="measurements" value="10000" min="0">
+                    <div class="input-hint">Set to 0 if not used</div>
+                    <div class="preset-chips">
+                        <span class="chip" onclick="setQuickValue('measurements', 0)">None</span>
+                        <span class="chip" onclick="setQuickValue('measurements', 1000)">1K</span>
+                        <span class="chip" onclick="setQuickValue('measurements', 10000)">10K</span>
+                        <span class="chip" onclick="setQuickValue('measurements', 100000)">100K</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Target Error Rate
+                        <span class="info-icon">
+                            <i class="fas fa-circle-info"></i>
+                            <span class="tooltip">Maximum acceptable probability of algorithm failure. Lower error rates require larger code distances and more physical qubits, but improve reliability.</span>
+                        </span>
+                    </label>
                     <select class="form-select" id="errorRate">
                         <option value="0.01">1% (Low precision)</option>
                         <option value="0.001">0.1% (Standard)</option>
@@ -72,7 +146,13 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Hardware Platform</label>
+                    <label class="form-label">
+                        Hardware Platform
+                        <span class="info-icon">
+                            <i class="fas fa-circle-info"></i>
+                            <span class="tooltip">Physical qubit technology. Gate speeds vary dramatically: superconducting (fast, 50ns), trapped ions (slow but high fidelity, 5μs), photonic (ultra-fast, 1ns), neutral atoms (moderate, 2μs).</span>
+                        </span>
+                    </label>
                     <select class="form-select" id="hardware">
                         <option value="superconducting">Superconducting (50ns gates)</option>
                         <option value="ion">Trapped Ion (5μs gates)</option>
@@ -117,6 +197,8 @@
         </div>
     </div>
 
+
 <script src="js/script.js"></script>
 </body>
+
 </html>
